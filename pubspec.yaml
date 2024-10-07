@@ -1,4 +1,4 @@
-name: flutter_mvvm_starter
+name: to_do_sensor_tracking_app
 description: "An MVVM patterned starter for Flutter project."
 publish_to: 'none'
 version: 1.0.0+1
@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_splash_screen: ^3.0.0
   http: ^1.2.2
+  flutter_svg: ^2.0.10+1
   json_annotation: ^4.9.0
   logger: ^2.4.0
   path_provider: ^2.1.4
@@ -26,13 +27,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/icons/
-    - assets/images/
-    - assets/others/
 
   fonts:
-    - family: inter
+    - family: poppins
       fonts:
-        - asset: assets/fonts/inter.ttf
+        - asset: assets/fonts/poppins.ttf
           style: normal
+
+  assets:
+    - assets/icons/ic_back_button.svg
+    - assets/icons/ic_splash_screen_logo.svg
+    - assets/images/user_avatar.svg
+    - assets/others/

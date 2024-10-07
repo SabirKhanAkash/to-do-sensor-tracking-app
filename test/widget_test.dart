@@ -6,8 +6,8 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mvvm_starter/main.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:to_do_sensor_tracking_app/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

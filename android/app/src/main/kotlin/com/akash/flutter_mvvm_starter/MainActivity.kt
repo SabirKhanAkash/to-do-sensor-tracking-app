@@ -1,4 +1,4 @@
-package com.akash.flutter_mvvm_starter
+package com.akash.to_do_sensor_tracking_app
 
 import io.flutter.embedding.android.FlutterActivity
 

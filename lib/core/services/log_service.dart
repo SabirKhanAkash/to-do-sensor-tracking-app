@@ -1,8 +1,8 @@
-import 'package:flutter_mvvm_starter/utils/config/env.dart';
-import 'package:logger/logger.dart';
 import 'dart:io';
 
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:to_do_sensor_tracking_app/utils/config/env.dart';
 
 class Log {
   static final logger = Logger(printer: PrettyPrinter());

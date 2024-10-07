@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvvm_starter/core/services/api_service.dart';
-import 'package:flutter_mvvm_starter/core/services/log_service.dart';
-import 'package:flutter_mvvm_starter/data/repositories/remote/auth_repository.dart';
-import 'package:flutter_mvvm_starter/data/state/auth_state.dart';
-import 'package:flutter_mvvm_starter/ui/auth/login_screen.dart';
-import 'package:flutter_mvvm_starter/viewmodels/auth_view_model.dart';
 import 'package:flutter_splash_screen/flutter_splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
+import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
+import 'package:to_do_sensor_tracking_app/ui/menu/menu_screen.dart';
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
@@ -39,22 +36,19 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthViewModel>(
-          create: (context) =>
-              AuthViewModel(authRepository: AuthRepository(apiService: ApiService())),
-        ),
-        ChangeNotifierProvider<AuthState>(
-          create: (context) => AuthState(),
+        ChangeNotifierProvider<AppState>(
+          create: (context) => AppState(),
         )
       ],
       child: MaterialApp(
-        title: 'Flutter MVVM Starter',
+        debugShowCheckedModeBanner: false,
+        title: 'To-do & Sensor Tracking App',
         theme: ThemeData(
-          fontFamily: ('inter'),
+          fontFamily: ('poppins'),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const LoginScreen(title: 'Flutter MVVM Starter'),
+        home: const MenuScreen(),
       ),
     );
   }
