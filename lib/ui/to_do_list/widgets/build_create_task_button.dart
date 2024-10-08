@@ -1,29 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
+import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_task_add_button.dart';
+import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_task_entry_ui.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 
-Consumer<AppState> buildCreateTaskButton() {
+Consumer<AppState> buildCreateTaskButton(TextEditingController taskController) {
   return Consumer<AppState>(builder: (context, data, _) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width - 32,
-      child: const Card(
-        color: Colors.white,
-        margin: EdgeInsets.symmetric(vertical: 15),
-        child: ListTile(
-          leading: Icon(
-            Icons.add_circle,
-            color: AppColors.primary,
-          ),
-          title: Text(
-            "Add a Task",
-            textAlign: TextAlign.start,
-            textDirection: TextDirection.ltr,
-            style: TextStyle(color: AppColors.listTitleColor, fontSize: 14),
-          ),
-          titleAlignment: ListTileTitleAlignment.center,
-        ),
-      ),
+    return GestureDetector(
+      onTap: () => data.isTaskAdding ? () : data.toggleTaskAddButtonVisibility(),
+      child: data.isTaskAdding
+          ? buildTaskEntryUI(context, taskController)
+          : buildTaskAddButton(context),
     );
   });
 }
