@@ -1,31 +1,36 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
 import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 
-Widget buildToDoCreateBody(BuildContext context, TextEditingController listTitleController) {
+Widget buildToDoCreateBody(
+    BuildContext context, TextEditingController listTitleController, int dataId) {
   return Consumer<AppState>(builder: (context, data, _) {
+    Log.create(Level.info, "tasks: ${jsonEncode(data.taskList)}");
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
-            decoration: InputDecoration(
+            controller: listTitleController,
+            decoration: const InputDecoration(
               hintText: 'Untitled List (0)',
               filled: false,
               border: InputBorder.none,
               hintStyle: TextStyle(color: AppColors.midGray),
             ),
             maxLines: 1,
-            style: TextStyle(color: AppColors.listTitleColor),
+            style: const TextStyle(color: AppColors.listTitleColor),
           ),
         ),
         Expanded(
           child: ListView.builder(
             itemCount: data.taskList.length,
-            // itemCount: 3,
+            reverse: false,
             padding: const EdgeInsets.only(top: 5),
             itemBuilder: (context, index) => Card(
               color: Colors.white,
@@ -37,32 +42,32 @@ Widget buildToDoCreateBody(BuildContext context, TextEditingController listTitle
                   checkColor: Colors.white,
                   value: false,
                   onChanged: (bool? value) {
-                    value = true;
+                    value = !value!;
                   },
                 ),
                 title: Text(
-                  "${jsonEncode(data.taskList.length)}",
+                  "${data.taskList[index].taskTitle}",
                   textAlign: TextAlign.start,
                   textDirection: TextDirection.ltr,
                   style: const TextStyle(
                       color: AppColors.listTitleColor, fontSize: 14, fontFamily: 'inter'),
                 ),
-                subtitle: const Row(
+                subtitle: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.calendar_month_rounded,
                       color: AppColors.midGray,
                       size: 16,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
-                      "Fri, 14 Sep",
-                      style: TextStyle(color: AppColors.midGray, fontSize: 10),
+                      "${data.taskList[index].createdDate}",
+                      style: const TextStyle(color: AppColors.midGray, fontSize: 10),
                     )
                   ],
                 ),

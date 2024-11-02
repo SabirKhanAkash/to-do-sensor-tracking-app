@@ -21,11 +21,15 @@ class Data {
 
 @JsonSerializable()
 class Task {
+  int? id;
+  int? dataId;
   String? taskTitle;
   String? createdDate;
   String? status;
 
   Task({
+    this.id,
+    this.dataId,
     this.taskTitle,
     this.createdDate,
     this.status,

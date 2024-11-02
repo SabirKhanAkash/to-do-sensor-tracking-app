@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
 import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/ui/menu/menu_screen.dart';
+import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
         title: 'To-do & Sensor Tracking App',
         theme: ThemeData(
           fontFamily: ('poppins'),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
           useMaterial3: true,
         ),
         home: const MenuScreen(),
