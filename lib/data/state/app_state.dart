@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_sensor_tracking_app/core/services/db_manager.dart';
+import 'package:to_do_sensor_tracking_app/core/services/shared_pref_service.dart';
+import 'package:to_do_sensor_tracking_app/core/services/sqflite_db_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
 
 class AppState extends ChangeNotifier {
@@ -9,8 +10,12 @@ class AppState extends ChangeNotifier {
   String _selectedDate = "";
   List<Data> _dataList = [];
   List<Task> _taskList = [];
+  int _completed = 0;
+  int _incompleted = 0;
 
-  List<Task> _tasks = [];
+  int get completed => _completed;
+
+  int get incompleted => _incompleted;
 
   List<Data> get dataList => _dataList;
 
@@ -18,13 +23,23 @@ class AppState extends ChangeNotifier {
 
   String get selectedDate => _selectedDate;
 
-  List<Task> get tasks => _tasks;
-
   bool get isTaskChecked => _isTaskChecked;
 
   bool get isNotificationEnabled => _isNotificationEnabled;
 
   bool get isTaskTextNotEmpty => _isTaskTextNotEmpty;
+
+  Future<void> setCompletedIncompleted() async {
+    _completed = await SharedPreference().getInt("completedDataCount") ?? 0;
+    _incompleted = await SharedPreference().getInt("incompleteDataCount") ?? 0;
+    notifyListeners();
+  }
+
+  bool toggleSpecificTask(int index, bool value) {
+    _taskList[index].status = !value ? "incomplete" : "completed";
+    notifyListeners();
+    return !value;
+  }
 
   void setDate(String formattedPickedDate) {
     _selectedDate = formattedPickedDate;
@@ -33,6 +48,7 @@ class AppState extends ChangeNotifier {
 
   Future<void> loadData() async {
     _dataList = await DBHelper().getAllData();
+    await setCompletedIncompleted();
     notifyListeners();
   }
 
@@ -41,35 +57,37 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getTaskOfData(Data data) {
-    _tasks.addAll(data as Iterable<Task>);
-    notifyListeners();
-  }
-
   Future<void> addData(Data data) async {
     await DBHelper().insertData(data);
     await loadData();
   }
 
-  Future<void> addTaskToData(int dataId, Task task) async {
-    await DBHelper().insertTaskToData(dataId, task);
+  Future<void> updateData(Data data) async {
+    await DBHelper().updateData(data);
+    await loadTasksOfData(data.id ?? 0);
     await loadData();
+    notifyListeners();
   }
 
+  /// TBD
   Future<void> updateTask(Task task) async {
     await DBHelper().updateTask(task);
     await loadData();
+    notifyListeners();
   }
 
   Future<void> deleteTask(int taskId, int dataId) async {
     await DBHelper().deleteTask(taskId);
+    await loadTasksOfData(dataId);
     await DBHelper().deleteDataIfNoTasks(dataId);
     await loadData();
+    notifyListeners();
   }
 
   Future<void> deleteData(int dataId) async {
-    await DBHelper().deleteDataIfNoTasks(dataId);
+    await DBHelper().deleteData(dataId);
     await loadData();
+    notifyListeners();
   }
 
   void toggleTaskAddCheckBoxVisibility() {
@@ -82,7 +100,6 @@ class AppState extends ChangeNotifier {
     _isNotificationEnabled = false;
     _isTaskTextNotEmpty = false;
     _selectedDate = "";
-    _tasks = [];
     notifyListeners();
   }
 

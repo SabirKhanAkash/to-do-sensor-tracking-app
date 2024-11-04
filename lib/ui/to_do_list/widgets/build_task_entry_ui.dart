@@ -12,8 +12,8 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 import 'package:to_do_sensor_tracking_app/utils/format_date.dart';
 
-void buildTaskEntryUI(BuildContext parentContext, TextEditingController taskController,
-    TextEditingController listTitleController, int dataId) {
+void buildTaskEntryUI(
+    BuildContext parentContext, TextEditingController taskController, int dataId) {
   showModalBottomSheet(
     enableDrag: true,
     context: parentContext,
@@ -96,9 +96,11 @@ void buildTaskEntryUI(BuildContext parentContext, TextEditingController taskCont
                                     : formatDate(DateTime.now()),
                                 status: 'incomplete',
                               );
-                              Log.create(Level.info, "dataId: ${dataId}");
-                              await data.addData(Data(id: dataId, title: listTitleController.text));
-                              await data.addTaskToData(dataId, newTask);
+                              Log.create(Level.info, "dataId: $dataId");
+                              // await data.addTaskToData(dataId, newTask);
+                              data.taskList.add(newTask);
+                              // await data.addData(Data(
+                              //     id: dataId, title: listTitleController.text, taskList: taskList));
                               taskController.clear();
                               data.resetAddTaskUI();
                               Navigator.pop(ctx);

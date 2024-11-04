@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:to_do_sensor_tracking_app/core/services/db_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 
-PreferredSizeWidget buildToDoListAppBar(DBHelper dbHelper) {
+PreferredSizeWidget buildToDoListAppBar() {
   return AppBar(
     toolbarHeight: 75,
     surfaceTintColor: Colors.white,
@@ -21,22 +22,25 @@ PreferredSizeWidget buildToDoListAppBar(DBHelper dbHelper) {
         ),
       ),
     ),
-    title: const Column(
+    title: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Sabir Khan Akash",
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
-        SizedBox(height: 4),
-        Text(
-          "5 incomplete, 5 completed",
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: TextStyle(fontSize: 14, color: Colors.grey),
-        ),
+        const SizedBox(height: 4),
+        Consumer<AppState>(builder: (context, data, _) {
+          data.setCompletedIncompleted();
+          return Text(
+            "${data.incompleted} incomplete, ${data.completed} completed",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          );
+        }),
       ],
     ),
     actions: [

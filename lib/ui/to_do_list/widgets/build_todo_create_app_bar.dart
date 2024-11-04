@@ -6,11 +6,8 @@ import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 
-PreferredSizeWidget buildToDoCreateAppBar(
-  BuildContext context,
-  TextEditingController listTitleController,
-  TextEditingController taskController,
-) {
+PreferredSizeWidget buildToDoCreateAppBar(TextEditingController listTitleController,
+    TextEditingController taskController, int dataId, Data? todo) {
   return AppBar(
     forceMaterialTransparency: true,
     titleSpacing: 5,
@@ -40,7 +37,7 @@ PreferredSizeWidget buildToDoCreateAppBar(
     actions: [
       Consumer<AppState>(builder: (context, data, _) {
         return Visibility(
-          visible: data.isTaskChecked,
+          visible: data.taskList.isNotEmpty,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
@@ -52,23 +49,16 @@ PreferredSizeWidget buildToDoCreateAppBar(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 data.resetAddTaskUI();
-                List<Task> taskList = [
-                  Task(
-                    taskTitle: taskController.text,
-                    createdDate: DateTime.now().toString(),
-                    status: 'incomplete',
-                  ),
-                ];
-
-                Data newData = Data(
-                  title: listTitleController.text,
-                  taskList: taskList,
-                );
-
-                data.addData(newData);
-
+                if (todo == null) {
+                  await data.addData(
+                      Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
+                } else {
+                  await data.loadTasksOfData(dataId);
+                  await data.updateData(
+                      Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
+                }
                 listTitleController.clear();
                 taskController.clear();
 

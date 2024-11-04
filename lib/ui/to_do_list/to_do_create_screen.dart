@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_sensor_tracking_app/core/services/db_manager.dart';
+import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
 import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_create_task_button.dart';
 import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_todo_create_app_bar.dart';
@@ -9,11 +9,11 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 
 class ToDoCreateScreen extends StatefulWidget {
   final int dataId;
-  final DBHelper dbHelper;
+  final Data? data;
 
   const ToDoCreateScreen({
     Key? key,
-    required this.dbHelper,
+    this.data,
     required this.dataId,
   }) : super(key: key);
 
@@ -29,7 +29,7 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
   @override
   void initState() {
     super.initState();
-    listTitleController.text = "Untitled List (${widget.dataId})";
+    listTitleController.text = widget.data?.title ?? "Untitled List (${widget.dataId})";
     fetchTasks();
   }
 
@@ -50,10 +50,10 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
         onWillPop: _onWillPop,
         child: Scaffold(
           backgroundColor: AppColors.lightWhite,
-          appBar: buildToDoCreateAppBar(context, listTitleController, taskController),
-          body: buildToDoCreateBody(context, listTitleController, widget.dataId),
-          floatingActionButton:
-              buildCreateTaskButton(context, taskController, listTitleController, widget.dataId),
+          appBar: buildToDoCreateAppBar(
+              listTitleController, taskController, widget.dataId, widget.data),
+          body: buildToDoCreateBody(listTitleController),
+          floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
         ),
       ),
     );

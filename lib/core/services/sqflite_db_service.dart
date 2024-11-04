@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:to_do_sensor_tracking_app/core/services/shared_pref_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
 
 class DBHelper {
@@ -43,24 +44,35 @@ class DBHelper {
     );
   }
 
-  Future<void> insertTaskToData(int dataId, Task task) async {
+  Future<void> updateData(Data data) async {
     final db = await database;
 
-    await db.insert('tasks', {
-      'data_id': dataId,
-      'taskTitle': task.taskTitle,
-      'createdDate': task.createdDate,
-      'status': task.status,
-    });
+    await db.update(
+      'data',
+      {'title': data.title},
+      where: 'id = ?',
+      whereArgs: [data.id],
+    );
+
+    for (var task in data.taskList!) {
+      await db.update(
+        'tasks',
+        {
+          'taskTitle': task.taskTitle,
+          'createdDate': task.createdDate,
+          'status': task.status,
+        },
+        where: 'id = ? AND data_id = ?',
+        whereArgs: [task.id, data.id],
+      );
+    }
   }
 
-  // Insert Data with tasks
   Future<int> insertData(Data data) async {
     final db = await database;
 
     int dataId = await db.insert('data', {'title': data.title});
 
-    // Insert each task referencing the Data ID
     for (var task in data.taskList!) {
       await db.insert('tasks', {
         'data_id': dataId,
@@ -73,18 +85,18 @@ class DBHelper {
     return dataId;
   }
 
-  // Fetch all Data and their tasks
   Future<List<Data>> getAllData() async {
     final db = await database;
 
-    // Fetch all Data entries
     final List<Map<String, dynamic>> dataMaps = await db.query('data');
     List<Data> dataList = [];
+
+    int completedDataCount = 0;
+    int incompleteDataCount = 0;
 
     for (var dataMap in dataMaps) {
       int dataId = dataMap['id'];
 
-      // Fetch associated tasks
       final List<Map<String, dynamic>> taskMaps =
           await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
 
@@ -104,22 +116,29 @@ class DBHelper {
         taskList: tasks,
       );
       dataList.add(data);
+
+      bool allTasksCompleted =
+          tasks.isNotEmpty && tasks.every((task) => task.status == 'completed');
+      if (allTasksCompleted)
+        completedDataCount++;
+      else
+        incompleteDataCount++;
+
+      await SharedPreference().setInt("completedDataCount", completedDataCount);
+      await SharedPreference().setInt("incompleteDataCount", incompleteDataCount);
     }
 
     return dataList;
   }
 
-  // Fetch tasks of a specific data
   Future<List<Task>> getTasksOfData(int dataID) async {
     final db = await database;
 
-    // Fetch all Data entries
     final List<Map<String, dynamic>> dataMaps = await db.query('data');
 
     for (var dataMap in dataMaps) {
       int dataId = dataMap['id'];
       if (dataId == dataID) {
-        // Fetch associated tasks
         final List<Map<String, dynamic>> taskMaps =
             await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
 
@@ -138,7 +157,7 @@ class DBHelper {
     return [];
   }
 
-  // Update Task by taskId
+  /// TBD
   Future<void> updateTask(Task task) async {
     final db = await database;
     await db.update(
@@ -149,7 +168,6 @@ class DBHelper {
     );
   }
 
-  // Delete Task by taskId
   Future<void> deleteTask(int taskId) async {
     final db = await database;
     await db.delete(
@@ -159,7 +177,6 @@ class DBHelper {
     );
   }
 
-  // Delete Data when all tasks are deleted
   Future<void> deleteDataIfNoTasks(int dataId) async {
     final db = await database;
 
@@ -173,5 +190,14 @@ class DBHelper {
         whereArgs: [dataId],
       );
     }
+  }
+
+  Future<void> deleteData(int dataId) async {
+    final db = await database;
+    await db.delete(
+      'data',
+      where: 'id = ?',
+      whereArgs: [dataId],
+    );
   }
 }
