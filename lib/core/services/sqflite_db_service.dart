@@ -1,5 +1,7 @@
+import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
 import 'package:to_do_sensor_tracking_app/core/services/shared_pref_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
 
@@ -36,6 +38,8 @@ class DBHelper {
             data_id INTEGER,
             taskTitle TEXT,
             createdDate TEXT,
+            notificationEnabled INTEGER,
+            note TEXT,
             status TEXT,
             FOREIGN KEY (data_id) REFERENCES data(id) ON DELETE CASCADE
           )
@@ -54,17 +58,35 @@ class DBHelper {
       whereArgs: [data.id],
     );
 
-    for (var task in data.taskList!) {
-      await db.update(
+    for (var task in data.taskList ?? []) {
+      int affectedRows = await db.update(
         'tasks',
         {
           'taskTitle': task.taskTitle,
           'createdDate': task.createdDate,
+          'notificationEnabled': task.notificationEnabled,
+          'note': task.note ?? "",
           'status': task.status,
         },
         where: 'id = ? AND data_id = ?',
         whereArgs: [task.id, data.id],
       );
+
+      if (affectedRows == 0) {
+        await db.insert(
+          'tasks',
+          {
+            'data_id': data.id,
+            'taskTitle': task.taskTitle,
+            'createdDate': task.createdDate,
+            'notificationEnabled': task.notificationEnabled,
+            'note': task.note ?? "",
+            'status': task.status,
+          },
+        );
+      } else {
+        Log.create(Level.info, "Updated task with id: ${task.id}");
+      }
     }
   }
 
@@ -78,6 +100,8 @@ class DBHelper {
         'data_id': dataId,
         'taskTitle': task.taskTitle,
         'createdDate': task.createdDate,
+        'notificationEnabled': task.notificationEnabled,
+        'note': task.note ?? "",
         'status': task.status
       });
     }
@@ -106,6 +130,8 @@ class DBHelper {
           dataId: taskMap['data_id'],
           taskTitle: taskMap['taskTitle'],
           createdDate: taskMap['createdDate'],
+          notificationEnabled: taskMap['notificationEnabled'],
+          note: taskMap['note'] ?? "",
           status: taskMap['status'],
         );
       }).toList();
@@ -148,6 +174,8 @@ class DBHelper {
             dataId: taskMap['data_id'],
             taskTitle: taskMap['taskTitle'],
             createdDate: taskMap['createdDate'],
+            notificationEnabled: taskMap['notificationEnabled'],
+            note: taskMap['note'] ?? "",
             status: taskMap['status'],
           );
         }).toList();

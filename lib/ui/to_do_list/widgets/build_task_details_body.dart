@@ -14,13 +14,18 @@ Widget buildTaskDetailsBody(Task task) {
           padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40, bottom: 10),
           child: Row(
             children: [
-              SvgPicture.string(AppImages().bellIcon),
+              SvgPicture.string(
+                AppImages().bellIcon,
+                color: task.notificationEnabled == 1 ? AppColors.primary : AppColors.lightGray,
+              ),
               SizedBox(
                 width: 5,
               ),
               Text(
                 "Remind Me",
-                style: TextStyle(color: AppColors.lightGray, fontSize: 16),
+                style: TextStyle(
+                    color: task.notificationEnabled == 1 ? AppColors.primary : AppColors.lightGray,
+                    fontSize: 16),
               ),
             ],
           ),
@@ -30,7 +35,7 @@ Widget buildTaskDetailsBody(Task task) {
           child: Row(
             children: [
               SvgPicture.string(
-                AppImages().bellIcon,
+                AppImages().calenderIcon,
                 color: AppColors.primary,
               ),
               SizedBox(

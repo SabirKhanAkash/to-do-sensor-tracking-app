@@ -23,15 +23,19 @@ class Data {
 class Task {
   int? id;
   int? dataId;
+  int? notificationEnabled;
   String? taskTitle;
   String? createdDate;
+  String? note;
   String? status;
 
   Task({
     this.id,
     this.dataId,
+    this.notificationEnabled,
     this.taskTitle,
     this.createdDate,
+    this.note,
     this.status,
   });
 

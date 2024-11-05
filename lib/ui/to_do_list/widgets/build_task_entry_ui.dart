@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
 import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/date_picker.dart';
@@ -90,17 +88,16 @@ void buildTaskEntryUI(
                         ? GestureDetector(
                             onTap: () async {
                               Task newTask = Task(
+                                id: data.taskList.length + 1,
+                                dataId: dataId,
+                                notificationEnabled: data.isNotificationEnabled ? 1 : 0,
                                 taskTitle: taskController.text,
                                 createdDate: data.selectedDate != ""
                                     ? data.selectedDate.toString()
                                     : formatDate(DateTime.now()),
                                 status: 'incomplete',
                               );
-                              Log.create(Level.info, "dataId: $dataId");
-                              // await data.addTaskToData(dataId, newTask);
-                              data.taskList.add(newTask);
-                              // await data.addData(Data(
-                              //     id: dataId, title: listTitleController.text, taskList: taskList));
+                              data.addTask(newTask);
                               taskController.clear();
                               data.resetAddTaskUI();
                               Navigator.pop(ctx);
@@ -113,14 +110,17 @@ void buildTaskEntryUI(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: data.isNotificationEnabled
-                          ? SvgPicture.string(
-                              AppImages().bellIcon,
-                              color: AppColors.primary,
-                            )
-                          : SvgPicture.string(AppImages().bellIcon),
+                    GestureDetector(
+                      onTap: () => data.toggleNotification(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: data.isNotificationEnabled
+                            ? SvgPicture.string(
+                                AppImages().bellIcon,
+                                color: AppColors.primary,
+                              )
+                            : SvgPicture.string(AppImages().bellIcon),
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -130,7 +130,7 @@ void buildTaskEntryUI(
                             msg: "Task copied to clipboard",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
-                            backgroundColor: Colors.black54,
+                            backgroundColor: AppColors.primary,
                             textColor: Colors.white,
                           );
                         }

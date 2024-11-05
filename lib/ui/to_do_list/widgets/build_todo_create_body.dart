@@ -40,15 +40,15 @@ Widget buildToDoCreateBody(TextEditingController listTitleController) {
                 margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: ListTile(
                   leading: Checkbox(
-                    fillColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    fillColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return AppColors.primary;
                       }
                       return Colors.white;
                     }),
                     checkColor: Colors.white,
-                    side: MaterialStateBorderSide.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    side: WidgetStateBorderSide.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return const BorderSide(color: AppColors.primary);
                       }
                       return const BorderSide(color: Colors.grey);
@@ -85,9 +85,17 @@ Widget buildToDoCreateBody(TextEditingController listTitleController) {
                     ],
                   ),
                   titleAlignment: ListTileTitleAlignment.center,
-                  trailing: const Icon(
-                    Icons.star_border_rounded,
-                    color: AppColors.darkGray,
+                  trailing: GestureDetector(
+                    onTap: () => data.toggleNotificationOfSpecificTask(index),
+                    child: data.taskList[index].notificationEnabled == 1
+                        ? const Icon(
+                            Icons.star,
+                            color: AppColors.primary,
+                          )
+                        : const Icon(
+                            Icons.star_border_rounded,
+                            color: AppColors.darkGray,
+                          ),
                   ),
                 ),
               ),

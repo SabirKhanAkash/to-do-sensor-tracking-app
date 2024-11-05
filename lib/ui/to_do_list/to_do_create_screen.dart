@@ -37,23 +37,14 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
     return await appState.loadTasksOfData(widget.dataId);
   }
 
-  Future<bool> _onWillPop() async {
-    appState.resetAddTaskUI();
-    Navigator.pop(context);
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        backgroundColor: AppColors.lightWhite,
-        appBar: buildToDoCreateAppBar(
-            listTitleController, taskController, widget.dataId, widget.data),
-        body: buildToDoCreateBody(listTitleController),
-        floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
-      ),
+    return Scaffold(
+      backgroundColor: AppColors.lightWhite,
+      appBar:
+          buildToDoCreateAppBar(listTitleController, taskController, widget.dataId, widget.data),
+      body: buildToDoCreateBody(listTitleController),
+      floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
     );
   }
 }

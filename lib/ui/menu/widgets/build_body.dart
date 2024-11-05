@@ -38,7 +38,7 @@ Widget buildBody(BuildContext context) {
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: AppColors.sensorTrackingMenuButtonColor,
-              padding: const EdgeInsets.symmetric(horizontal: 10), // Padding inside the button
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16), // Optional: Adds rounded corners
               ),

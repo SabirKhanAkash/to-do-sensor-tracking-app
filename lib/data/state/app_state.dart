@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:to_do_sensor_tracking_app/core/services/shared_pref_service.dart';
 import 'package:to_do_sensor_tracking_app/core/services/sqflite_db_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
+import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 
 class AppState extends ChangeNotifier {
   bool _isTaskChecked = false;
@@ -29,6 +31,16 @@ class AppState extends ChangeNotifier {
 
   bool get isTaskTextNotEmpty => _isTaskTextNotEmpty;
 
+  void toggleNotification() {
+    _isNotificationEnabled = !_isNotificationEnabled;
+    notifyListeners();
+  }
+
+  void addTask(Task newTask) {
+    _taskList.add(newTask);
+    notifyListeners();
+  }
+
   Future<void> setCompletedIncompleted() async {
     _completed = await SharedPreference().getInt("completedDataCount") ?? 0;
     _incompleted = await SharedPreference().getInt("incompleteDataCount") ?? 0;
@@ -39,6 +51,26 @@ class AppState extends ChangeNotifier {
     _taskList[index].status = !value ? "incomplete" : "completed";
     notifyListeners();
     return !value;
+  }
+
+  void toggleNotificationOfSpecificTask(int index) {
+    _taskList[index].notificationEnabled = _taskList[index].notificationEnabled == 1 ? 0 : 1;
+    _taskList[index].notificationEnabled == 1
+        ? Fluttertoast.showToast(
+            msg: "Notification enabled for this task",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: AppColors.primary,
+            textColor: Colors.white,
+          )
+        : Fluttertoast.showToast(
+            msg: "Notification disabled for this task",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.black54,
+            textColor: Colors.white,
+          );
+    notifyListeners();
   }
 
   void setDate(String formattedPickedDate) {
@@ -64,7 +96,6 @@ class AppState extends ChangeNotifier {
 
   Future<void> updateData(Data data) async {
     await DBHelper().updateData(data);
-    await loadTasksOfData(data.id ?? 0);
     await loadData();
     notifyListeners();
   }

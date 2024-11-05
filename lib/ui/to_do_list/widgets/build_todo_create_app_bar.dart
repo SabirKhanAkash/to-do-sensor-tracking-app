@@ -10,9 +10,10 @@ PreferredSizeWidget buildToDoCreateAppBar(TextEditingController listTitleControl
     TextEditingController taskController, int dataId, Data? todo) {
   return AppBar(
     centerTitle: false,
-    forceMaterialTransparency: true,
     titleSpacing: 5,
-    backgroundColor: Colors.transparent,
+    surfaceTintColor: Colors.white,
+    backgroundColor: Colors.white,
+    elevation: 0,
     leading: Consumer<AppState>(builder: (context, data, _) {
       return Padding(
         padding: const EdgeInsets.all(15.0),
@@ -56,7 +57,7 @@ PreferredSizeWidget buildToDoCreateAppBar(TextEditingController listTitleControl
                   await data.addData(
                       Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
                 } else {
-                  await data.loadTasksOfData(dataId);
+                  // await data.loadTasksOfData(dataId);
                   await data.updateData(
                       Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
                 }

@@ -23,15 +23,19 @@ Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
 Task _$TaskFromJson(Map<String, dynamic> json) => Task(
       id: (json['id'] as num?)?.toInt(),
       dataId: (json['dataId'] as num?)?.toInt(),
+      notificationEnabled: (json['notificationEnabled'] as num?)?.toInt(),
       taskTitle: json['taskTitle'] as String?,
       createdDate: json['createdDate'] as String?,
+      note: json['note'] as String?,
       status: json['status'] as String?,
     );
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'id': instance.id,
       'dataId': instance.dataId,
+      'notificationEnabled': instance.notificationEnabled,
       'taskTitle': instance.taskTitle,
       'createdDate': instance.createdDate,
+      'note': instance.note,
       'status': instance.status,
     };
