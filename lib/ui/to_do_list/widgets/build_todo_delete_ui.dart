@@ -7,7 +7,6 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 void buildToDoDeleteUI(BuildContext parentContext, Data todo) {
   showModalBottomSheet(
     enableDrag: true,
-    barrierColor: Colors.transparent,
     context: parentContext,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20), bottom: Radius.circular(20)),

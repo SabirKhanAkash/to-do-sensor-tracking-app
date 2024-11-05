@@ -8,6 +8,7 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 
 PreferredSizeWidget buildTaskDetailsAppBar(Task task) {
   return AppBar(
+    centerTitle: false,
     forceMaterialTransparency: true,
     titleSpacing: 5,
     backgroundColor: AppColors.lightWhite,

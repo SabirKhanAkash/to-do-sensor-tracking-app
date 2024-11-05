@@ -7,7 +7,6 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 void buildTaskDeleteUI(BuildContext parentContext, Task task) {
   showModalBottomSheet(
     enableDrag: true,
-    barrierColor: Colors.transparent,
     context: parentContext,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20), bottom: Radius.circular(20)),
@@ -51,7 +50,7 @@ void buildTaskDeleteUI(BuildContext parentContext, Task task) {
                       ),
                     ),
                     const Divider(
-                      height: 0.2,
+                      height: 1,
                       color: AppColors.lightWhite,
                     ),
                     GestureDetector(

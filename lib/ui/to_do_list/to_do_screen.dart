@@ -15,13 +15,11 @@ class ToDoScreen extends StatefulWidget {
 }
 
 class _ToDoScreenState extends State<ToDoScreen> {
-  late final DBHelper dbHelper;
   late final AppState appState = Provider.of<AppState>(context, listen: false);
 
   @override
   void initState() {
     super.initState();
-    dbHelper = DBHelper();
     fetchData();
   }
 
@@ -31,13 +29,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.lightWhite,
-        appBar: buildToDoListAppBar(),
-        body: buildToDoListBody(context),
-        floatingActionButton: buildFloatingActionButton(),
-      ),
+    return Scaffold(
+      backgroundColor: AppColors.lightWhite,
+      appBar: buildToDoListAppBar(),
+      body: buildToDoListBody(context),
+      floatingActionButton: buildFloatingActionButton(),
     );
   }
 }

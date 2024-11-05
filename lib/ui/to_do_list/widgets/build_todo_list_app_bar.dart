@@ -6,6 +6,7 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 
 PreferredSizeWidget buildToDoListAppBar() {
   return AppBar(
+    centerTitle: false,
     toolbarHeight: 75,
     surfaceTintColor: Colors.white,
     backgroundColor: Colors.white,

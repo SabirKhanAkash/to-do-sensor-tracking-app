@@ -8,7 +8,7 @@
 PRODUCT_NAME = to_do_sensor_tracking_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.akash.flutterMvvmStarter
+PRODUCT_BUNDLE_IDENTIFIER = com.akash.to_do_sensor_tracking_app
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 com.akash. All rights reserved.

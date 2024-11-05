@@ -45,16 +45,14 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          backgroundColor: AppColors.lightWhite,
-          appBar: buildToDoCreateAppBar(
-              listTitleController, taskController, widget.dataId, widget.data),
-          body: buildToDoCreateBody(listTitleController),
-          floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
-        ),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: AppColors.lightWhite,
+        appBar: buildToDoCreateAppBar(
+            listTitleController, taskController, widget.dataId, widget.data),
+        body: buildToDoCreateBody(listTitleController),
+        floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
       ),
     );
   }

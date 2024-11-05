@@ -9,6 +9,7 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 PreferredSizeWidget buildToDoCreateAppBar(TextEditingController listTitleController,
     TextEditingController taskController, int dataId, Data? todo) {
   return AppBar(
+    centerTitle: false,
     forceMaterialTransparency: true,
     titleSpacing: 5,
     backgroundColor: Colors.transparent,

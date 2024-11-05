@@ -31,15 +31,13 @@ class _TaskScreenState extends State<TaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          backgroundColor: AppColors.lightWhite,
-          appBar: buildTaskDetailsAppBar(widget.task),
-          body: buildTaskDetailsBody(widget.task),
-          floatingActionButton: buildDeleteTaskButton(context, widget.task),
-        ),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: AppColors.lightWhite,
+        appBar: buildTaskDetailsAppBar(widget.task),
+        body: buildTaskDetailsBody(widget.task),
+        floatingActionButton: buildDeleteTaskButton(context, widget.task),
       ),
     );
   }
