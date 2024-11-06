@@ -38,49 +38,53 @@ A Cross-Platform Flutter App that has to do list and sensor tracking functionali
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/8322c1a4-54a7-482b-b7f6-75e14a57437c" width="270" height="570" alt="Main Menu Screen"/><br>
-      <i>Album Listview</i>
+      <i>Main Menu Screen</i>
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/34da063a-4e05-4537-8666-5767c39982f3" width="270" height="570" alt="To-Do List Screen"/><br>
-      <i>Album Gridview</i>
+      <i>To-Do List Screen</i>
     </td>
   </tr>
   <tr>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/4033332f-1f20-43bd-8ef4-43ecece7a6bd" width="270" height="570" alt="To-Do Details Screen"/><br>
-      <i>Search Album Listview</i>
+      <i>To-Do Details Screen</i>
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/fb2eab29-2879-40d6-8e5f-69fe8ab42d17" width="270" height="570" alt="Task Add Screen"/><br>
-      <i>Search Album Gridview</i>
+      <i>Task Add Screen</i>
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/51f1d1b2-65df-4d4e-be19-ec95a9b6a61f" width="270" height="570" alt="Push Notification with Tasks"/><br>
-      <i>No Result on Album Search</i>
+      <i>Push Notification with Tasks</i>
     </td>
   </tr>
   <tr>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/72e1911f-2409-486c-9ec1-3c714603321b" width="270" height="570" alt="Task List View"/><br>
-      <i>Photo Listview</i>
+      <i>Task List View</i>
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/08937e56-b9aa-4817-80b4-18afc3cb3467" width="270" height="570" alt="Task Details Screen"/><br>
-      <i>Photo Gridview</i>
+      <i>Task Details Screen</i>
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/3f7b4451-00e4-45e4-bc93-3d946f2e1d3d" width="270" height="570" alt="Task Delete Popup"/><br>
-      <i>Search Photo Listview</i>
+      <i>Task Delete Popup</i>
     </td>
   </tr>
   <tr>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/2172cfdd-8162-4327-a135-2b37fd98b07c" width="270" height="570" alt="To-Do List View"/><br>
-      <i>Search Photo Gridview</i>
+      <i>To-Do List View</i>
+    </td>
+    <td style="text-align: center;">
+      <img src="https://github.com/user-attachments/assets/5fa1f1fe-3537-45a6-9171-383598b687af" width="270" height="570" alt="To-Do Delete"/><br>
+      <i>To-Do List View</i>
     </td>
     <td style="text-align: center;">
       <img src="https://github.com/user-attachments/assets/0fc00215-c730-4c03-ac75-3b9284033950" width="270" height="570" alt="Gyro and Accelerometer Screen"/><br>
-      <i>No Result on Photo Search</i>
+      <i>Gyro and Accelerometer Screen</i>
     </td>
   </tr>
 </table>
