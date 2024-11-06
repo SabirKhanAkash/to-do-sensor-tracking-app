@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
-import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
-import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 
 PreferredSizeWidget buildSensorAppBar(BuildContext context) {

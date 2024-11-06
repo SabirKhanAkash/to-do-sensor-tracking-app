@@ -55,7 +55,6 @@ Widget buildToDoListBody(
                       titleAlignment: ListTileTitleAlignment.center,
                       trailing: Text(
                         "${data.dataList[index].taskList?.length ?? 0}",
-                        // Assuming taskList is part of Data
                         style: const TextStyle(
                           fontSize: 15,
                           color: AppColors.primary,

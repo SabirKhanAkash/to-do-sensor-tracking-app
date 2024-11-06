@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
+import 'package:to_do_sensor_tracking_app/core/services/notification_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
 import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/date_picker.dart';
@@ -10,7 +13,8 @@ import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 import 'package:to_do_sensor_tracking_app/utils/format_date.dart';
 
-void buildTaskEntryUI(BuildContext parentContext, TextEditingController taskController, int dataId) {
+void buildTaskEntryUI(
+    BuildContext parentContext, TextEditingController taskController, int dataId) {
   showModalBottomSheet(
     enableDrag: true,
     context: parentContext,
@@ -91,10 +95,20 @@ void buildTaskEntryUI(BuildContext parentContext, TextEditingController taskCont
                                 dataId: dataId,
                                 notificationEnabled: data.isNotificationEnabled ? 1 : 0,
                                 taskTitle: taskController.text,
-                                createdDate:
-                                    data.selectedDate != "" ? data.selectedDate.toString() : formatDate(DateTime.now()),
+                                createdDate: data.selectedDate != ""
+                                    ? data.selectedDate.toString()
+                                    : formatDate(DateTime.now()),
                                 status: 'incomplete',
                               );
+
+                              if (newTask.notificationEnabled == 1 &&
+                                  newTask.createdDate.toString() == (formatDate(DateTime.now()))) {
+                                Log.create(Level.info, "today: ${newTask.createdDate}");
+                                await NotificationService().showNotification(
+                                    "Due Date Alert",
+                                    "Today is the due "
+                                        "date of task: ${newTask.taskTitle}");
+                              }
                               data.addTask(newTask);
                               taskController.clear();
                               data.resetAddTaskUI();

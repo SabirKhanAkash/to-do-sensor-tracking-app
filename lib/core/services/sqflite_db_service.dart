@@ -2,8 +2,10 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:to_do_sensor_tracking_app/core/services/log_service.dart';
+import 'package:to_do_sensor_tracking_app/core/services/notification_service.dart';
 import 'package:to_do_sensor_tracking_app/core/services/shared_pref_service.dart';
 import 'package:to_do_sensor_tracking_app/data/models/data_model/data.dart';
+import 'package:to_do_sensor_tracking_app/utils/format_date.dart';
 
 class DBHelper {
   static final DBHelper _instance = DBHelper._internal();
@@ -48,6 +50,94 @@ class DBHelper {
     );
   }
 
+  /**
+   * CRUD on Data
+   */
+  Future<int> insertData(Data data) async {
+    final db = await database;
+
+    int dataId = await db.insert('data', {'title': data.title});
+
+    for (var task in data.taskList!) {
+      await db.insert('tasks', {
+        'data_id': dataId,
+        'taskTitle': task.taskTitle,
+        'createdDate': task.createdDate,
+        'notificationEnabled': task.notificationEnabled,
+        'note': task.note ?? "",
+        'status': task.status
+      });
+    }
+
+    return dataId;
+  }
+
+  Future<List<Data>> getAllData() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> dataMaps = await db.query('data');
+    List<Data> dataList = [];
+
+    int completedDataCount = 0;
+    int incompleteDataCount = 0;
+    int tasksWithNotificationTodayCount = 0;
+
+    String todayFormatted = formatDate(DateTime.now());
+
+    for (var dataMap in dataMaps) {
+      int dataId = dataMap['id'];
+
+      final List<Map<String, dynamic>> taskMaps =
+          await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
+
+      List<Task> tasks = taskMaps.map((taskMap) {
+        return Task(
+          id: taskMap['id'],
+          dataId: taskMap['data_id'],
+          taskTitle: taskMap['taskTitle'],
+          createdDate: taskMap['createdDate'],
+          notificationEnabled: taskMap['notificationEnabled'],
+          note: taskMap['note'] ?? "",
+          status: taskMap['status'],
+        );
+      }).toList();
+
+      Data data = Data(
+        id: dataId,
+        title: dataMap['title'],
+        taskList: tasks,
+      );
+      dataList.add(data);
+
+      bool allTasksCompleted =
+          tasks.isNotEmpty && tasks.every((task) => task.status == 'completed');
+
+      if (allTasksCompleted) {
+        completedDataCount++;
+      } else {
+        incompleteDataCount++;
+      }
+
+      await SharedPreference().setInt("completedDataCount", completedDataCount);
+      await SharedPreference().setInt("incompleteDataCount", incompleteDataCount);
+
+      int todayTaskCount = tasks
+          .where((task) =>
+              task.notificationEnabled == 1 &&
+              task.createdDate == todayFormatted &&
+              task.status != 'completed')
+          .length;
+
+      tasksWithNotificationTodayCount += todayTaskCount;
+    }
+    if (tasksWithNotificationTodayCount > 0) {
+      NotificationService().showNotification(
+          "Due Date Alert", "You have got $tasksWithNotificationTodayCount task(s) due today");
+    }
+
+    return dataList;
+  }
+
   Future<void> updateData(Data data) async {
     final db = await database;
 
@@ -90,71 +180,18 @@ class DBHelper {
     }
   }
 
-  Future<int> insertData(Data data) async {
+  Future<void> deleteData(int dataId) async {
     final db = await database;
-
-    int dataId = await db.insert('data', {'title': data.title});
-
-    for (var task in data.taskList!) {
-      await db.insert('tasks', {
-        'data_id': dataId,
-        'taskTitle': task.taskTitle,
-        'createdDate': task.createdDate,
-        'notificationEnabled': task.notificationEnabled,
-        'note': task.note ?? "",
-        'status': task.status
-      });
-    }
-
-    return dataId;
+    await db.delete(
+      'data',
+      where: 'id = ?',
+      whereArgs: [dataId],
+    );
   }
 
-  Future<List<Data>> getAllData() async {
-    final db = await database;
-
-    final List<Map<String, dynamic>> dataMaps = await db.query('data');
-    List<Data> dataList = [];
-
-    int completedDataCount = 0;
-    int incompleteDataCount = 0;
-
-    for (var dataMap in dataMaps) {
-      int dataId = dataMap['id'];
-
-      final List<Map<String, dynamic>> taskMaps = await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
-
-      List<Task> tasks = taskMaps.map((taskMap) {
-        return Task(
-          id: taskMap['id'],
-          dataId: taskMap['data_id'],
-          taskTitle: taskMap['taskTitle'],
-          createdDate: taskMap['createdDate'],
-          notificationEnabled: taskMap['notificationEnabled'],
-          note: taskMap['note'] ?? "",
-          status: taskMap['status'],
-        );
-      }).toList();
-
-      Data data = Data(
-        id: dataId,
-        title: dataMap['title'],
-        taskList: tasks,
-      );
-      dataList.add(data);
-
-      bool allTasksCompleted = tasks.isNotEmpty && tasks.every((task) => task.status == 'completed');
-      if (allTasksCompleted)
-        completedDataCount++;
-      else
-        incompleteDataCount++;
-
-      await SharedPreference().setInt("completedDataCount", completedDataCount);
-      await SharedPreference().setInt("incompleteDataCount", incompleteDataCount);
-    }
-
-    return dataList;
-  }
-
+  /**
+   * RD on Task of a Data
+   */
   Future<List<Task>> getTasksOfData(int dataID) async {
     final db = await database;
 
@@ -163,7 +200,8 @@ class DBHelper {
     for (var dataMap in dataMaps) {
       int dataId = dataMap['id'];
       if (dataId == dataID) {
-        final List<Map<String, dynamic>> taskMaps = await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
+        final List<Map<String, dynamic>> taskMaps =
+            await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
 
         List<Task> tasks = taskMaps.map((taskMap) {
           return Task(
@@ -182,31 +220,11 @@ class DBHelper {
     return [];
   }
 
-  /// TBD
-  Future<void> updateTask(Task task) async {
-    final db = await database;
-    await db.update(
-      'tasks',
-      task.toJson(),
-      where: 'id = ?',
-      whereArgs: [task.id],
-    );
-  }
-
-  Future<void> deleteTask(int taskId) async {
-    final db = await database;
-    await db.delete(
-      'tasks',
-      where: 'id = ?',
-      whereArgs: [taskId],
-    );
-  }
-
   Future<void> deleteDataIfNoTasks(int dataId) async {
     final db = await database;
 
-    final taskCount =
-        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM tasks WHERE data_id = ?', [dataId]));
+    final taskCount = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM tasks WHERE data_id = ?', [dataId]));
 
     if (taskCount == 0) {
       await db.delete(
@@ -217,12 +235,12 @@ class DBHelper {
     }
   }
 
-  Future<void> deleteData(int dataId) async {
+  Future<void> deleteTask(int taskId) async {
     final db = await database;
     await db.delete(
-      'data',
+      'tasks',
       where: 'id = ?',
-      whereArgs: [dataId],
+      whereArgs: [taskId],
     );
   }
 }

@@ -7,7 +7,7 @@ Future<void> selectDate(BuildContext context, AppState appState) async {
     context: context,
     initialDate: DateTime.now(),
     firstDate: DateTime.now(),
-    lastDate: DateTime(2100),
+    lastDate: DateTime(DateTime.now().year + 5),
   );
   String formattedPickedDate = formatDate(pickedDate!);
   if (formattedPickedDate != appState.selectedDate) {

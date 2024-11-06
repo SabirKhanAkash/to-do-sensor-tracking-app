@@ -34,7 +34,7 @@ PreferredSizeWidget buildToDoListAppBar() {
         ),
         const SizedBox(height: 4),
         Consumer<AppState>(builder: (context, data, _) {
-          data.setCompletedIncompleted();
+          data.getCompletedIncompleted();
           return Text(
             "${data.incompleted} incomplete, ${data.completed} completed",
             overflow: TextOverflow.ellipsis,

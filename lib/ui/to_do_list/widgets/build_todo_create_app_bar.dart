@@ -6,8 +6,8 @@ import 'package:to_do_sensor_tracking_app/data/state/app_state.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_image.dart';
 
-PreferredSizeWidget buildToDoCreateAppBar(
-    TextEditingController listTitleController, TextEditingController taskController, int dataId, Data? todo) {
+PreferredSizeWidget buildToDoCreateAppBar(TextEditingController listTitleController,
+    TextEditingController taskController, int dataId, Data? todo) {
   return AppBar(
     centerTitle: false,
     titleSpacing: 5,
@@ -54,10 +54,11 @@ PreferredSizeWidget buildToDoCreateAppBar(
               onPressed: () async {
                 data.resetAddTaskUI();
                 if (todo == null) {
-                  await data.addData(Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
+                  await data.addData(
+                      Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
                 } else {
-                  // await data.loadTasksOfData(dataId);
-                  await data.updateData(Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
+                  await data.updateData(
+                      Data(id: dataId, title: listTitleController.text, taskList: data.taskList));
                 }
                 listTitleController.clear();
                 taskController.clear();

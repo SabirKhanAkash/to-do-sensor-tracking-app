@@ -9,7 +9,9 @@ part of 'data.dart';
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String?,
-      taskList: (json['taskList'] as List<dynamic>?)?.map((e) => Task.fromJson(e as Map<String, dynamic>)).toList(),
+      taskList: (json['taskList'] as List<dynamic>?)
+          ?.map((e) => Task.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{

@@ -6,6 +6,7 @@ import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_create_tas
 import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_todo_create_app_bar.dart';
 import 'package:to_do_sensor_tracking_app/ui/to_do_list/widgets/build_todo_create_body.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
+import 'package:to_do_sensor_tracking_app/utils/request_permission.dart';
 
 class ToDoCreateScreen extends StatefulWidget {
   final int dataId;
@@ -31,6 +32,7 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
     super.initState();
     listTitleController.text = widget.data?.title ?? "Untitled List (${widget.dataId})";
     fetchTasks();
+    PermissionRequest().promptForNotification();
   }
 
   Future<void> fetchTasks() async {
@@ -41,7 +43,8 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightWhite,
-      appBar: buildToDoCreateAppBar(listTitleController, taskController, widget.dataId, widget.data),
+      appBar:
+          buildToDoCreateAppBar(listTitleController, taskController, widget.dataId, widget.data),
       body: buildToDoCreateBody(listTitleController),
       floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
     );

@@ -16,41 +16,36 @@ class AppState extends ChangeNotifier {
   int _incompleted = 0;
 
   int get completed => _completed;
-
   int get incompleted => _incompleted;
-
   List<Data> get dataList => _dataList;
-
   List<Task> get taskList => _taskList;
-
   String get selectedDate => _selectedDate;
-
   bool get isTaskChecked => _isTaskChecked;
-
   bool get isNotificationEnabled => _isNotificationEnabled;
-
   bool get isTaskTextNotEmpty => _isTaskTextNotEmpty;
 
-  void toggleNotification() {
-    _isNotificationEnabled = !_isNotificationEnabled;
-    notifyListeners();
-  }
-
-  void addTask(Task newTask) {
-    _taskList.add(newTask);
-    notifyListeners();
-  }
-
-  Future<void> setCompletedIncompleted() async {
+  Future<void> getCompletedIncompleted() async {
     _completed = await SharedPreference().getInt("completedDataCount") ?? 0;
     _incompleted = await SharedPreference().getInt("incompleteDataCount") ?? 0;
     notifyListeners();
   }
 
-  bool toggleSpecificTask(int index, bool value) {
-    _taskList[index].status = !value ? "incomplete" : "completed";
+  void resetAddTaskUI() {
+    _isTaskChecked = false;
+    _isNotificationEnabled = false;
+    _isTaskTextNotEmpty = false;
+    _selectedDate = "";
     notifyListeners();
-    return !value;
+  }
+
+  void setDate(String formattedPickedDate) {
+    _selectedDate = formattedPickedDate;
+    notifyListeners();
+  }
+
+  void toggleNotification() {
+    _isNotificationEnabled = !_isNotificationEnabled;
+    notifyListeners();
   }
 
   void toggleNotificationOfSpecificTask(int index) {
@@ -73,19 +68,20 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setDate(String formattedPickedDate) {
-    _selectedDate = formattedPickedDate;
+  bool toggleSpecificTask(int index, bool value) {
+    _taskList[index].status = !value ? "incomplete" : "completed";
+    notifyListeners();
+    return !value;
+  }
+
+  void toggleTaskAddButton(TextEditingController t) {
+    _isTaskTextNotEmpty = t.text.isNotEmpty;
+    _isNotificationEnabled = t.text.isNotEmpty;
     notifyListeners();
   }
 
-  Future<void> loadData() async {
-    _dataList = await DBHelper().getAllData();
-    await setCompletedIncompleted();
-    notifyListeners();
-  }
-
-  Future<void> loadTasksOfData(int dataId) async {
-    _taskList = await DBHelper().getTasksOfData(dataId);
+  void toggleTaskAddCheckBoxVisibility() {
+    _isTaskChecked = !_isTaskChecked;
     notifyListeners();
   }
 
@@ -94,23 +90,14 @@ class AppState extends ChangeNotifier {
     await loadData();
   }
 
+  Future<void> loadData() async {
+    _dataList = await DBHelper().getAllData();
+    await getCompletedIncompleted();
+    notifyListeners();
+  }
+
   Future<void> updateData(Data data) async {
     await DBHelper().updateData(data);
-    await loadData();
-    notifyListeners();
-  }
-
-  /// TBD
-  Future<void> updateTask(Task task) async {
-    await DBHelper().updateTask(task);
-    await loadData();
-    notifyListeners();
-  }
-
-  Future<void> deleteTask(int taskId, int dataId) async {
-    await DBHelper().deleteTask(taskId);
-    await loadTasksOfData(dataId);
-    await DBHelper().deleteDataIfNoTasks(dataId);
     await loadData();
     notifyListeners();
   }
@@ -121,22 +108,21 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleTaskAddCheckBoxVisibility() {
-    _isTaskChecked = !_isTaskChecked;
+  void addTask(Task newTask) {
+    _taskList.add(newTask);
     notifyListeners();
   }
 
-  void resetAddTaskUI() {
-    _isTaskChecked = false;
-    _isNotificationEnabled = false;
-    _isTaskTextNotEmpty = false;
-    _selectedDate = "";
+  Future<void> loadTasksOfData(int dataId) async {
+    _taskList = await DBHelper().getTasksOfData(dataId);
     notifyListeners();
   }
 
-  void toggleTaskAddButton(TextEditingController t) {
-    _isTaskTextNotEmpty = t.text.isNotEmpty;
-    _isNotificationEnabled = t.text.isNotEmpty;
+  Future<void> deleteTask(int taskId, int dataId) async {
+    await DBHelper().deleteTask(taskId);
+    await loadTasksOfData(dataId);
+    await DBHelper().deleteDataIfNoTasks(dataId);
+    await loadData();
     notifyListeners();
   }
 }
