@@ -121,8 +121,7 @@ class DBHelper {
     for (var dataMap in dataMaps) {
       int dataId = dataMap['id'];
 
-      final List<Map<String, dynamic>> taskMaps =
-          await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
+      final List<Map<String, dynamic>> taskMaps = await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
 
       List<Task> tasks = taskMaps.map((taskMap) {
         return Task(
@@ -143,8 +142,7 @@ class DBHelper {
       );
       dataList.add(data);
 
-      bool allTasksCompleted =
-          tasks.isNotEmpty && tasks.every((task) => task.status == 'completed');
+      bool allTasksCompleted = tasks.isNotEmpty && tasks.every((task) => task.status == 'completed');
       if (allTasksCompleted)
         completedDataCount++;
       else
@@ -165,8 +163,7 @@ class DBHelper {
     for (var dataMap in dataMaps) {
       int dataId = dataMap['id'];
       if (dataId == dataID) {
-        final List<Map<String, dynamic>> taskMaps =
-            await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
+        final List<Map<String, dynamic>> taskMaps = await db.query('tasks', where: 'data_id = ?', whereArgs: [dataId]);
 
         List<Task> tasks = taskMaps.map((taskMap) {
           return Task(
@@ -208,8 +205,8 @@ class DBHelper {
   Future<void> deleteDataIfNoTasks(int dataId) async {
     final db = await database;
 
-    final taskCount = Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM tasks WHERE data_id = ?', [dataId]));
+    final taskCount =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM tasks WHERE data_id = ?', [dataId]));
 
     if (taskCount == 0) {
       await db.delete(

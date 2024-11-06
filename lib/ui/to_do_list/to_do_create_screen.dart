@@ -41,8 +41,7 @@ class _ToDoCreateScreenState extends State<ToDoCreateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightWhite,
-      appBar:
-          buildToDoCreateAppBar(listTitleController, taskController, widget.dataId, widget.data),
+      appBar: buildToDoCreateAppBar(listTitleController, taskController, widget.dataId, widget.data),
       body: buildToDoCreateBody(listTitleController),
       floatingActionButton: buildCreateTaskButton(context, taskController, widget.dataId),
     );

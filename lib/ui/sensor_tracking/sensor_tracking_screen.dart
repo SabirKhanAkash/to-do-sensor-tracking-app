@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:to_do_sensor_tracking_app/ui/sensor_tracking/widgets/build_sensor_app_bar.dart';
 import 'package:to_do_sensor_tracking_app/utils/config/app_colors.dart';
 
 class SensorTrackingScreen extends StatefulWidget {
@@ -108,6 +109,7 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightWhite,
+      appBar: buildSensorAppBar(context),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
@@ -117,7 +119,7 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -125,8 +127,7 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
                     width: MediaQuery.of(context).size.width - 20,
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
                         color: AppColors.lightWhite,
                         border: Border(
                           bottom: BorderSide(color: AppColors.grayLineColor, width: 1),
@@ -134,7 +135,7 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
                           right: BorderSide(color: AppColors.grayLineColor, width: 1),
                           left: BorderSide(color: AppColors.grayLineColor, width: 1),
                         )),
-                    margin: const EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 15),
                     child: const Padding(
                       padding: EdgeInsets.only(left: 10.0),
                       child: Text(
@@ -146,8 +147,8 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
                         color: AppColors.lightWhite,
                         border: Border(
                           bottom: BorderSide(color: AppColors.grayLineColor, width: 1),
@@ -200,8 +201,7 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
                     width: MediaQuery.of(context).size.width - 20,
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
                         color: AppColors.lightWhite,
                         border: Border(
                           bottom: BorderSide(color: AppColors.grayLineColor, width: 1),
@@ -221,8 +221,8 @@ class _SensorTrackingScreenState extends State<SensorTrackingScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
                         color: AppColors.lightWhite,
                         border: Border(
                           bottom: BorderSide(color: AppColors.grayLineColor, width: 1),

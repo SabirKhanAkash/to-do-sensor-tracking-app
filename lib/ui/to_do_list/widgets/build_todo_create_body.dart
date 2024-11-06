@@ -62,8 +62,7 @@ Widget buildToDoCreateBody(TextEditingController listTitleController) {
                     "${data.taskList[index].taskTitle}",
                     textAlign: TextAlign.start,
                     textDirection: TextDirection.ltr,
-                    style: const TextStyle(
-                        color: AppColors.listTitleColor, fontSize: 14, fontFamily: 'inter'),
+                    style: const TextStyle(color: AppColors.listTitleColor, fontSize: 14, fontFamily: 'inter'),
                   ),
                   subtitle: Row(
                     mainAxisSize: MainAxisSize.min,

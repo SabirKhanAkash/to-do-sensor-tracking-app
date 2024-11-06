@@ -24,8 +24,7 @@ Widget buildTaskDetailsBody(Task task) {
               Text(
                 "Remind Me",
                 style: TextStyle(
-                    color: task.notificationEnabled == 1 ? AppColors.primary : AppColors.lightGray,
-                    fontSize: 16),
+                    color: task.notificationEnabled == 1 ? AppColors.primary : AppColors.lightGray, fontSize: 16),
               ),
             ],
           ),
